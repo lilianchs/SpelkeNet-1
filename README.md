@@ -1,5 +1,5 @@
 <div align="center">
-<h2>Discovering and using Spelke Segments </h2>
+<h2>Discovering and using Spelke segments </h2>
 
 [**Rahul Venkatesh***](https://rahulvenkk.github.io/)<sup>1</sup> · [**Klemen Kotar***](https://klemenkotar.github.io/)<sup>1</sup> · [**Lilian Naing Chen***](https://www.linkedin.com/in/lilian-chen-1975b81b1)<sup>1</sup> · [**Simon Kim**](https://www.linkedin.com/in/seungwoo-simon-kim)<sup>1</sup>· [**Luca Thomas Wheeler**]()<sup>1</sup> · [**Jared Watrous**](https://www.linkedin.com/in/jared-watrous)<sup>1</sup> · [**Ashley Xu**](https://www.linkedin.com/in/ashley-xu-a2588b1a9)<sup>1</sup> · [**Gia Ancone**](https://www.linkedin.com/in/gia-ancone-58b545207)<sup>1</sup> ·  [**Wanhee Lee**](https://scholar.google.com/citations?user=BdHgmrUAAAAJ&hl=ko)<sup>1</sup> [**Honglin Chen**](https://x.com/honglin_c?lang=en)<sup>2</sup> ·[**Daniel Bear**](https://twitter.com/recursus?lang=en)<sup>3</sup> ·  [**Stefan Stojanov**](https://sstojanov.github.io/)<sup>1</sup> ·  [**Daniel L. K. Yamins**](https://stanford.edu/~yamins/)<sup>1</sup>
 
