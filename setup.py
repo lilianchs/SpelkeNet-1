@@ -1,0 +1,35 @@
+from setuptools import setup, find_packages
+
+
+setup(
+    name="spelke_net",
+    version="0.1",
+    packages=find_packages(),
+    description="spelke_net",
+    author="Stanford NeuroAI Lab",
+    install_requires=[
+        'pycocotools',
+        'numpy==1.26.4',
+        'torch==2.1.2',
+        'scipy',
+        'tqdm',
+        'wandb',
+        'einops',
+        'matplotlib',
+        'h5py',
+        'torchvision',
+        'future',
+        'opencv-python',
+        'decord',
+        'pandas',
+        'matplotlib',
+        'moviepy',
+        'scikit-image',
+        'scikit-learn',
+        'vector_quantize_pytorch',
+        'google-cloud-storage',
+        "lpips",
+        "segment_anything",
+        "ptlflow",
+    ],
+)
