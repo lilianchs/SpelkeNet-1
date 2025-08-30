@@ -132,7 +132,7 @@ class SpelkeBenchModel:
     def run_inference(self, input_image, poke_point):
         '''
         Run inference on the input image and poke point.
-        :param input_image: numpy array of shape [H, W, 3] in [0, 1] range
+        :param input_image: numpy array of shape [H, W, 3] in [0, 255] range
         :param poke_point: (x, y) tuple representing the poke point in the image, x horizontal, y vertical
         :return: H, W numpy array representing the segment mask
         '''
@@ -230,12 +230,73 @@ This will:
 | AR     | 0.4816 | 0.2708 | 0.2524 | 0.2254 | 0.3271 | **0.5411** |
 | mIoU   | 0.6225 | 0.4990 | 0.4931 | 0.4553 | 0.4807 | **0.6811** |
 
+---
 
-### 🧠 Testing Your Own Model
+## 🧠 Evaluating your own model on SpelkeBench
 
-To evaluate a custom model:
-1. Implement a model class following the `SpelkeNetModel` interface in the file `spelke_net/inference/spelke_object_discovery/spelke_bench_class.py`.
-2. Pass its class name to the `--model_name` argument in the above commands.
+> ⚠️ **Note:** The evaluation scripts (e.g. `spelkebench-launch`, `spelkebench-evaluate`) are provided by the SpelkeNet repository, but can be run from **your own model repository**. You only need to install the SpelkeNet package to gain access to these command-line utilities.
+
+#### Step 1: Implement the Model Interface
+In your model repository, define a model class that **inherits from**: [`spelke_net.inference.spelke_object_discovery.spelke_bench_model.SpelkeBenchModel`](https://github.com/neuroailab/SpelkeNet/blob/main/spelke_net/inference/spelke_object_discovery/spelke_bench_model.py). You must implement the `run_inference` method with the following signature:
+
+```python
+from spelke_net.inference.spelke_object_discovery.spelke_bench_model import SpelkeBenchModel
+import numpy as np
+
+class YourSegmentationModel(SpelkeBenchModel):
+    def __init__(self):
+        # Initialize your model here
+        pass
+    
+    def run_inference(self, input_image, poke_point):
+        """
+        Args:
+            input_image: RGB image [H, W, 3] in [0, 255] range
+            poke_point: (x, y) tuple - poke location
+        Returns:
+            Binary mask [H, W] as numpy array
+        """
+        # Your segmentation logic here
+        pass
+```
+
+#### Step 2: Install the Evaluation Tools
+```bash
+conda activate your_env
+git clone https://github.com/neuroailab/SpelkeNet.git
+cd SpelkeNet
+pip install -e .
+```
+
+#### Step 3: Download Dataset
+```bash
+sh scripts/download_spelke_bench.sh  # Downloads to datasets/spelke_bench.h5
+```
+
+#### Step 4: Run Inference
+Use your custom model with the existing inference scripts by specifying the full Python path:
+```bash
+# Single GPU
+spelkebench-infer \
+  --model_name my_model.MyCustomModel \
+  --dataset_path ./datasets/spelke_bench.h5 \
+  --output_dir ./experiments/my_model_results \
+  --device cuda:0
+
+# Multi-GPU parallel inference  
+spelkebench-launch \
+  --gpus 0 1 2 3 \
+  --model_name my_model.MyCustomModel \
+  --dataset_path ./datasets/spelke_bench.h5 \
+  --output_dir ./experiments/my_model_results
+```
+
+#### Step 5: Evaluate Results
+```bash
+spelkebench-evaluate \
+  --input_dir ./experiments/my_model_results \
+  --output_dir ./experiments/my_model_results/metrics
+```
 
 ---
 

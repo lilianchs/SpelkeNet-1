@@ -20,9 +20,9 @@ def chunk_list(lst, n):
 
 def main():
     args = parse_args()
-
+    
     os.makedirs(args.output_dir, exist_ok=True)
-
+    
     with h5.File(args.dataset_path, 'r') as f:
         keys = sorted(f.keys())
         np.random.seed(42)
@@ -32,14 +32,14 @@ def main():
     if len(keys) == 0:
         print("No image keys found in dataset.")
         return
-
+    
     gpu_chunks = chunk_list(keys, len(args.gpus))
     processes = []
-
+    
     for gpu_id, chunk in zip(args.gpus, gpu_chunks):
         if len(chunk) == 0:
             continue
-
+        
         cmd = [
             f"CUDA_VISIBLE_DEVICES={gpu_id}",
             "python", args.script_path,
@@ -49,14 +49,14 @@ def main():
             "--device", f"cuda:{gpu_id}",
             "--img_names", *chunk
         ]
-
+        
         # Join as string for subprocess
         full_cmd = " ".join(f'"{c}"' if ' ' in c else c for c in cmd)
-
+        
         print(f"Launching on GPU {gpu_id} with {len(chunk)} images...")
         p = subprocess.Popen(full_cmd, shell=True)
         processes.append(p)
-
+    
     for p in processes:
         p.wait()
 

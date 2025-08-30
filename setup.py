@@ -1,11 +1,10 @@
 from setuptools import setup, find_packages
 
-
 setup(
     name="spelke_net",
     version="0.1",
     packages=find_packages(),
-    description="spelke_net",
+    description="SpelkeNet: Object segmentation through virtual poking",
     author="Stanford NeuroAI Lab",
     install_requires=[
         'pycocotools',
@@ -32,4 +31,19 @@ setup(
         "segment_anything",
         "ptlflow",
     ],
+    python_requires=">=3.8",
+    classifiers=[
+        "Development Status :: 3 - Alpha",
+        "Intended Audience :: Researchers",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+    ],
+    entry_points={
+        "console_scripts": [
+            "spelkebench-infer = spelke_net.inference.spelke_object_discovery.run_inference:main",
+            "spelkebench-launch = spelke_net.inference.spelke_object_discovery.run_inference_parallel:main",
+            "spelkebench-evaluate = spelke_net.inference.spelke_object_discovery.evaluate_folder:main"
+        ]
+    }
 )

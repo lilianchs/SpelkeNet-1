@@ -9,29 +9,35 @@ import numpy as np
 import cv2
 from spelke_net.utils.model_wrapper import ModelFactory
 
+from abc import ABC, abstractmethod
+import numpy as np
 
-class SpelkeBenchModel:
+class SpelkeBenchModel(ABC):
     """
-    Base class for SpelkeBench models.
-    This class should be inherited by all models that are used in the SpelkeBench framework.
+    Abstract base class for SpelkeBench evaluation models.
+    
+    All models evaluated on SpelkeBench must inherit from this class
+    and implement the required methods.
     """
 
     def __init__(self):
         """args to initialize the model"""
         return
 
+    @abstractmethod
     def run_inference(self, input_image, poke_point):
         '''
         Run inference on the input image and poke point.
-        :param input_image: numpy array of shape [H, W, 3] in [0, 1] range
+        :param input_image: numpy array of shape [H, W, 3] in [0, 255] range
         :param poke_point: (x, y) tuple representing the poke point in the image, x horizontal, y vertical
         :return: H, W numpy array representing the segment mask
         '''
+        pass
 
     def get_all_segmemts(self, input_image, poke_point_list):
         """
         Get all segments from the input image based on the poke point.
-        :param input_image: numpy array of shape [H, W, 3] in [0, 1] range
+        :param input_image: numpy array of shape [H, W, 3] in [0, 255] range
         :param poke_point_list: [N, 2] list of poke points, where each poke point is a tuple (x, y)
         :return: list of segments
         """
@@ -45,7 +51,7 @@ class SpelkeBenchModel:
         return all_segments
 
 
-class SpelkeNetInference:
+class SpelkeNetInference(SpelkeBenchModel):
     """
     SpelkeNetInference class for running inference on SpelkeNet models.
     Inherits from SpelkeBenchModel.
@@ -245,7 +251,6 @@ class SpelkeNetInference:
 
         # get last crop in original image coordinates
         final_bbox_in_orig = all_bbox_in_orig[-1].astype(np.int32)
-        # breakpoint()
         all_probe_points = np.array(all_probe_points)  # [num_iters+1, num_seeds*num_dirs, 2]
         # print(final_bbox_in_orig.shape, final_bbox_in_orig)
         #
@@ -269,7 +274,7 @@ class SpelkeNetInference:
     def run_inference(self, input_image, poke_point):
         '''
         Run inference on the input image and poke point.
-        :param input_image: numpy array of shape [H, W, 3] in [0, 1] range
+        :param input_image: numpy array of shape [H, W, 3] in [0, 255] range
         :param poke_point: (x, y) tuple representing the poke point in the image, x horizontal, y vertical
         :return:
         '''
@@ -377,3 +382,5 @@ class SpelkeNetModel7B(SpelkeBenchModel):
                                             num_seeds=num_seeds, num_dirs=num_dirs,
                                             model_name=model_name, num_zoom_dirs=num_zoom_dirs
                                            )
+        def run_inference(self, input_image, poke_point):
+            return self.inference.run_inference(input_image, poke_point)
